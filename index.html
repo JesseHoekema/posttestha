@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Assistant Lamp Bediening</title>
+</head>
+<body>
+    <h1>Home Assistant Lamp Bediening</h1>
+    
+    <button onclick="lampAan()">Zet Lamp Aan</button>
+    <button onclick="lampUit()">Zet Lamp Uit</button>
+
+    <script>
+        function lampAan() {
+            stuurActieNaarServer('aan');
+        }
+
+        function lampUit() {
+            stuurActieNaarServer('uit');
+        }
+
+        function stuurActieNaarServer(actie) {
+            fetch('https://8dnr6026-8000.euw.devtunnels.ms/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: actie
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                console.log(`Lamp succesvol ${actie === 'aan' ? 'ingeschakeld' : 'uitgeschakeld'}`);
+            })
+            .catch(error => {
+                console.error('Fout bij het sturen van het verzoek naar de server:', error);
+            });
+        }
+    </script>
+</body>
+</html>
